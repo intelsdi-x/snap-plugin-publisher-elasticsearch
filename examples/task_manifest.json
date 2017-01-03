@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "schedule": {
+    "type": "simple",
+    "interval": "5s"
+  },
+  "workflow": {
+    "collect": {
+      "metrics": {
+        "/intel/foo/bar/": {}
+      },
+      "config": {
+      },
+      "publish": [
+        {
+          "plugin_name": "elasticsearch",
+          "config": {
+            "protocol": "http",
+            "address": "172.0.0.1",
+            "port": 9200,
+            "index": "bar",
+            "type": "message",
+            "publish_fields": "Namespace|Data|Timestamp"
+          }
+        }
+      ]
+    }
+  }
+}

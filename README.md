@@ -2,7 +2,7 @@
 
 This plugin supports publishing metrics to Elasticsearch endpoint
 
-It is used in the [snap framework] (http://github.com/intelsdi-x/snap).
+It is used in the [Snap framework] (http://github.com/intelsdi-x/snap).
 
 
 1. [Getting Started](#getting-started)
@@ -58,10 +58,11 @@ You can also set following options if needed:
  - `index_timestamp` default is set to `true` (boolean). Set to false if not want to extend index prefix with timestamp
  - `publish_fields` default is set to `Namespace|Config|Data|Description|Timestamp|Unit|Version` (string). Remove field from metric structure which shouldn't be published.
 
+Plugin publishes dynamic elements from metric namespace.
 
 ### Examples
 
-Not yet provided!
+You can find example task manifest for using this plugin in folder [examples](https://github.com/intelsdi-x/snap-plugin-publisher-elasticsearch/examples)
 
 ### Roadmap
 
@@ -69,7 +70,7 @@ If you have a feature request, please add it as an [issue](https://github.com/in
 and/or submit a [pull request](https://github.com/intelsdi-x/snap-plugin-publisher-elasticsearch/pulls).
 
 ## Community Support
-This repository is one of **many** plugins in the **snap**, a powerful telemetry agent framework. See the full project at 
+This repository is one of **many** plugins in the **Snap**, a powerful telemetry agent framework. See the full project at 
 http://github.com/intelsdi-x/snap. To reach out to other users, head to the [main framework](https://github.com/intelsdi-x/snap#community-support).
 
 
@@ -80,7 +81,7 @@ There is more than one way to give back, from examples to blogs to code updates.
 
 ## License
 
-[snap](http://github.com/intelsdi-x/snap), along with this plugin, is an Open Source software released under the Apache 2.0 [License](LICENSE).
+[Snap](http://github.com/intelsdi-x/snap), along with this plugin, is an Open Source software released under the Apache 2.0 [License](LICENSE).
 
 
 ## Acknowledgements

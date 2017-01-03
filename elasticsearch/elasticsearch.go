@@ -2,7 +2,7 @@
 http://www.apache.org/licenses/LICENSE-2.0.txt
 
 
-Copyright 2015 Intel Corporation
+Copyright 2016 Intel Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -97,6 +97,11 @@ func sendRequest(metric plugin.Metric, url string, fieldsToPublish []string) err
 
 	for k, v := range metric.Tags {
 		metricToPublish[k] = v
+	}
+	for _, element := range metric.Namespace {
+		if element.IsDynamic() {
+			metricToPublish[element.Name] = element.Value
+		}
 	}
 	data, err := json.Marshal(metricToPublish)
 	if err != nil {
