@@ -2,7 +2,7 @@
 http://www.apache.org/licenses/LICENSE-2.0.txt
 
 
-Copyright 2015 Intel Corporation
+Copyright 2016 Intel Corporation
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ package elasticsearch
 import (
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
 
 	"github.com/intelsdi-x/snap-plugin-lib-go/v1/plugin"
 	. "github.com/smartystreets/goconvey/convey"
-	"strconv"
 )
 
 func TestElasticsearchInvalidConfig(t *testing.T) {
@@ -72,6 +72,27 @@ func TestElasticsearchPublishCreated(t *testing.T) {
 	addr := strings.Split(url[2], ":")[0]
 	port, _ := strconv.ParseInt(strings.Split(url[2], ":")[1], 10, 64)
 	mts[0] = plugin.Metric{Namespace: plugin.NewNamespace("A"), Data: 7}
+	cfg := plugin.Config{"protocol": "http", "address": addr, "port": port, "index": "database", "type": "test",
+		"index_timestamp": true, "publish_fields": "Namespace|Data"}
+	err := el.Publish(mts, cfg)
+	Convey("Check if Publish method accepts http status 201 (Created) in return", t, func() {
+		So(err, ShouldBeNil)
+	})
+}
+
+func TestElasticsearchPublishDynamicMetric(t *testing.T) {
+	el := ElasticsearchPublisher{}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusCreated)
+	}))
+	defer server.Close()
+
+	var mts []plugin.Metric
+	mts = make([]plugin.Metric, 1)
+	url := strings.Split(server.URL, "/")
+	addr := strings.Split(url[2], ":")[0]
+	port, _ := strconv.ParseInt(strings.Split(url[2], ":")[1], 10, 64)
+	mts[0] = plugin.Metric{Namespace: plugin.NewNamespace("A").AddDynamicElement("B", "test").AddStaticElement("C"), Data: 7}
 	cfg := plugin.Config{"protocol": "http", "address": addr, "port": port, "index": "database", "type": "test",
 		"index_timestamp": true, "publish_fields": "Namespace|Data"}
 	err := el.Publish(mts, cfg)
