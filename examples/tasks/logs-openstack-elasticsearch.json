@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "schedule": {
+    "type": "simple",
+    "interval": "1s"
+  },
+  "workflow": {
+    "collect": {
+      "config": {
+        "/intel/logs": {
+          "metric_name": "metric2",
+          "cache_dir": "/tmp/snap_cache",
+          "log_dir": "<path_to_logs_dir>/logs/logs2",
+          "log_file": "openstack-log.log",
+          "splitter_type": "date-time",
+          "splitter_pos": "before",
+          "collection_time": "30ms",
+          "metrics_limit": 50
+        }
+      },
+      "tags": {
+        "/intel/logs": {
+          "type": "log"
+        }
+      },
+      "metrics": {
+        "/intel/logs/*/*/message": {}
+      },
+      "process": [
+        {
+          "plugin_name": "logs-openstack",
+          "publish": [
+            {
+              "plugin_name": "elasticsearch",
+              "config": {
+                "protocol": "http",
+                "address": "127.0.0.1",
+                "port": 9201,
+                "index": "snap-log",
+                "publish_fields": "Data|Timestamp"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "schedule": {
+    "type": "simple",
+    "interval": "1s"
+  },
+  "workflow": {
+    "collect": {
+      "config": {
+        "/intel/logs": {
+          "metric_name": "metric1",
+          "cache_dir": "/tmp/snap_cache",
+          "log_dir": "<path_to_logs_dir>/logs/logs1",
+          "log_file": "apache-log.*[.]log",
+          "splitter_type": "new-line",
+          "splitter_pos": "after",
+          "collection_time": "30ms",
+          "metrics_limit": 50
+        }
+      },
+      "tags": {
+        "/intel/logs": {
+          "type": "log",
+          "severity": "6",
+          "severity_label": "INFO",
+          "logger": "metric"
+        }
+      },
+      "metrics": {
+        "/intel/logs/*/*/message": {}
+      },
+      "process": [
+        {
+          "plugin_name": "logs-regexp",
+          "config": {
+            "regexp_log": "(?P<client_ip>\\S+) (\\S{1,}) (\\S{1,}) [[](?P<timestamp>\\d{2}[/]\\S+[/]\\d{4}[:]\\d{2}[:]\\d{2}[:]\\d{2} \\S\\d+)[]] (?P<message>.*)",
+            "regexp_message": "(?P<http_method>[A-Z]{3,}) (?P<http_url>/\\S*) HTTP/(?P<http_version>\\d+.\\d+)\" (?P<http_status>\\d*) (?P<http_response_size>\\S*) (?P<http_response_time>\\S*)",
+            "regexp_time": "(?P<day>\\d{2})/(?P<month>[a-zA-Z]+)/(?P<year>\\d{4}):(?P<hour>\\d{2}):(?P<minutes>\\d{2}):(?P<seconds>\\d{2}) (?P<timezone>.\\d+)"
+          },
+          "publish": [
+            {
+              "plugin_name": "elasticsearch",
+              "config": {
+                "protocol": "http",
+                "address": "127.0.0.1",
+                "port": 9200,
+                "index": "snap-log",
+                "publish_fields": "Data|Timestamp"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

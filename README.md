@@ -1,3 +1,22 @@
+<!--
+http://www.apache.org/licenses/LICENSE-2.0.txt
+
+
+    Copyright 2016 Intel Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
 # snap-plugin-publisher-elasticsearch
 
 This plugin supports publishing metrics to Elasticsearch endpoint
@@ -62,7 +81,69 @@ Plugin publishes dynamic elements from metric namespace.
 
 ### Examples
 
-You can find example task manifest for using this plugin in folder [examples](https://github.com/intelsdi-x/snap-plugin-publisher-elasticsearch/examples)
+You can find exemplary task manifests for using this plugin in folder [examples](examples/tasks).
+
+Example running [logs collector plugin](https://github.com/intelsdi-x/snap-plugin-collector-logs), [logs-regexp processor](https://github.com/intelsdi-x/snap-plugin-processor-logs-regexp),
+[logs-openstack processor](https://github.com/intelsdi-x/snap-plugin-processor-logs-openstack), and writing data to elasticsearch.
+
+Prepare docker with elasticsearch
+```
+$ docker pull elasticsearch
+$ docker run --name elasticsearch -p 9200:9200 -p 9300:9300 elasticsearch
+```
+
+In one terminal window, open the Snap daemon:
+```
+$ snapteld -t 0 -l 1 -m 999
+```
+
+The option "-l 1" it is for setting the debugging log level, "-t 0" is for disabling plugin signing, and "-m 999" is for the maximum number of instances of a loaded plugin to run.
+
+In another terminal window:
+
+Download and load collector, processor and publisher plugins:
+```
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-collector-logs/latest/linux/x86_64/snap-plugin-collector-logs
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-processor-logs-regexp/latest/linux/x86_64/snap-plugin-processor-logs-regexp
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-processor-logs-openstack/latest/linux/x86_64/snap-plugin-processor-logs-openstack
+$ wget http://snap.ci.snap-telemetry.io/plugins/snap-plugin-publisher-elasticsearch/latest/linux/x86_64/snap-plugin-publisher-elasticsearch
+$ snaptel plugin load snap-plugin-collector-logs
+$ snaptel plugin load snap-plugin-processor-logs-regexp
+$ snaptel plugin load snap-plugin-processor-logs-openstack
+$ snaptel plugin load snap-plugin-publisher-elasticsearch
+```
+
+Find logs to collect or use exemplary logs available in [logs](examples/logs).
+
+Create task manifests, see examples:
+- to use snap-plugin-collector-logs, snap-plugin-processor-logs-regexp, snap-plugin-publisher-elasticsearch - [logs-regexp-elasticsearch.json](examples/tasks/logs-regexp-elasticsearch.json)
+- to use snap-plugin-collector-logs, snap-plugin-processor-logs-openstack, snap-plugin-publisher-elasticsearch - [logs-openstack-elasticsearch.json](examples/tasks/logs-openstack-elasticsearch.json)
+
+If you are using exemplary logs you need to modify `"log_dir"` in task manifests and set appropriate paths to directories with logs.
+If you want to collect your own logs you need to adjust config sections in task manifests to your environment.
+
+Create tasks:
+```
+$ snaptel task create -t logs-regexp-elasticsearch.json
+$ snaptel task create -t logs-openstack-elasticsearch.json
+```
+
+See running tasks:
+```
+$ snaptel task list
+```
+
+Check indexes in elasticsearch:
+```
+$ curl 'http://localhost:9200/_cat/indices?v'
+```
+
+See data saved in elasticsearch:
+```
+$ curl -XGET 'http://localhost:9200/snap*/message/_search?pretty=true&size=9999'
+```
+
+Exemplary data saved in elasticsearch has the form which is shown in [outputs](examples/outputs).
 
 ### Roadmap
 
