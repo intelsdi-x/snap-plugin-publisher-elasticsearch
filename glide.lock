@@ -1,21 +1,31 @@
-hash: a801278bc014b08cf101ab16c3378583d1306452ff260945e9b1f75793936064
-updated: 2016-12-22T10:02:41.105241309-05:00
+hash: da1b2585bff07f469c54c63d1d4e172cebe8dcbd132bbbaa015d2922afd12b4f
+updated: 2017-11-03T05:24:37.27923223+08:00
 imports:
 - name: github.com/golang/protobuf
-  version: 888eb0692c857ec880338addf316bd662d5e630e
+  version: 748d386b5c1ea99658fd69fe9f03991ce86a90c1
   subpackages:
   - proto
+  - ptypes
+  - ptypes/any
+  - ptypes/duration
+  - ptypes/timestamp
 - name: github.com/intelsdi-x/snap-plugin-lib-go
-  version: 4b5999a62ffb7604f173c1ab3c2205ba8b559624
+  version: 69934c200c23811291535a804852ff2231bf85f0
   subpackages:
   - v1/plugin
   - v1/plugin/rpc
 - name: github.com/julienschmidt/httprouter
-  version: 4563b0ba73e4db6c6423b60a26f3cadd2e9a1ec9
-- name: github.com/Sirupsen/logrus
-  version: d26492970760ca5d33129d2d799e34be5c4782eb
+  version: 8c199fb6259ffc1af525cc3ad52ee60ba8359669
+- name: github.com/sirupsen/logrus
+  version: f006c2ac4710855cf0f916dd6b77acf6b048dc6e
+- name: github.com/urfave/cli
+  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
+- name: golang.org/x/crypto
+  version: aedad9a179ec1ea11b7064c57cbc6dc30d7724ec
+  subpackages:
+  - ssh/terminal
 - name: golang.org/x/net
-  version: 154d9f9ea81208afed560f4cf27b4860c8ed1904
+  version: 054b33e6527139ad5b1ec2f6232c3b175bd9a30c
   subpackages:
   - context
   - http2
@@ -24,19 +34,33 @@ imports:
   - lex/httplex
   - trace
 - name: golang.org/x/sys
-  version: 8f0908ab3b2457e2e15403d3697c9ef5cb4b57a9
+  version: c8bc69bc2db9c57ccf979550bc69655df5039a8a
   subpackages:
   - unix
-- name: google.golang.org/grpc
-  version: 0032a855ba5c8a3c8e0d71c2deef354b70af1584
+- name: golang.org/x/text
+  version: cfdf022e86b4ecfb646e1efbd7db175dd623a8fa
+- name: google.golang.org/genproto
+  version: f676e0f3ac6395ff1a529ae59a6670878a8371a6
   subpackages:
+  - googleapis/rpc/status
+- name: google.golang.org/grpc
+  version: b8669c35455183da6d5c474ea6e72fbf55183274
+  subpackages:
+  - balancer
   - codes
+  - connectivity
   - credentials
+  - grpclb/grpc_lb_v1/messages
   - grpclog
   - internal
+  - keepalive
   - metadata
   - naming
   - peer
+  - resolver
+  - stats
+  - status
+  - tap
   - transport
 testImports:
 - name: github.com/gopherjs/gopherjs
@@ -46,12 +70,12 @@ testImports:
 - name: github.com/jtolds/gls
   version: 8ddce2a84170772b95dd5d576c48d517b22cac63
 - name: github.com/smartystreets/assertions
-  version: 443d812296a84445c202c085f19e18fc238f8250
+  version: 4ea54c1f28ad3ae597e76607dea3871fa177e263
   subpackages:
   - internal/go-render/render
   - internal/oglematchers
 - name: github.com/smartystreets/goconvey
-  version: d4c757aa9afd1e2fc1832aaab209b5794eb336e1
+  version: 9e8dc3f972df6c8fcc0375ef492c24d0bb204857
   subpackages:
   - convey
   - convey/gotest
